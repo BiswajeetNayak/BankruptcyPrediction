@@ -63,11 +63,7 @@ if __name__ == '__main__':
 
     for year in range(1, 6):
         model, pred, proba, eval_results, cv_score = model_training(data_dummy[data_dummy['#years'] == year])
-        models.append(model)
-        predictions.append(pred)
-        probabilities.append(proba)
-        evaluation_results.append(eval_results)
-        mean_cv_score.append(cv_score)
+
         #save_output(pred,proba,data_dummy[data_dummy['#years'] == year])
 
 print('Execution Completed. \n All models are trained and predictions and probabilities are saved in data/output folder.')

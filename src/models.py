@@ -16,13 +16,13 @@ def isolation_forest(X):
 
 
 def logistic_regression(X, y):
-    lm = LogisticRegression(random_state=100)
+    lm = LogisticRegression(random_state=100, class_weight='balanced')
     lm.fit(X, y)
     return lm
 
 
 def random_forest(X, y):
-    rf = RandomForestClassifier(random_state=100)
+    rf = RandomForestClassifier(random_state=100, class_weight='balanced')
     rf.fit(X, y)
     return rf
 
@@ -40,7 +40,7 @@ def GBM(X, y):
 
 
 def SVM(X, y):
-    svm = SVC(random_state=100)
+    svm = SVC(random_state=100, class_weight='balanced', probability=True)
     svm.fit(X, y)
     return svm
 
@@ -61,6 +61,10 @@ def model_training(df):
                                                         test_size=config.test_split_perc,
                                                         random_state=100)
 
+    print('Distribution of classes in test data: ', np.unique(y_test, return_counts=True))
+
+    models, predictions, probabilities, evaluation_results, mean_cv_score = [], [], [], [], []
+
     for model in config.models:
         if model == 'LogisticRegression':
             lm = logistic_regression(X_train, y_train)
@@ -74,12 +78,15 @@ def model_training(df):
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm, pred, proba, eval_results, cv_score
-
-        print("============================================================================================")
+            models.append(lm)
+            predictions.append(pred)
+            probabilities.append(proba)
+            evaluation_results.append(eval_results)
+            mean_cv_score.append(cv_score)
+            print("============================================================================================")
 
         if model == 'RandomForest':
-            lm = random_forest(X_train, y_train)
+            rf = random_forest(X_train, y_train)
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
             save_model(lm, model)
@@ -90,7 +97,11 @@ def model_training(df):
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm, pred, proba, eval_results, cv_score
+            models.append(rf)
+            predictions.append(pred)
+            probabilities.append(proba)
+            evaluation_results.append(eval_results)
+            mean_cv_score.append(cv_score)
 
         print("============================================================================================")
 
@@ -106,7 +117,11 @@ def model_training(df):
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm, pred, proba, eval_results, cv_score
+            models.append(model)
+            predictions.append(pred)
+            probabilities.append(proba)
+            evaluation_results.append(eval_results)
+            mean_cv_score.append(cv_score)
 
         print("============================================================================================")
 
@@ -122,7 +137,11 @@ def model_training(df):
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm, pred, proba, eval_results, cv_score
+            models.append(model)
+            predictions.append(pred)
+            probabilities.append(proba)
+            evaluation_results.append(eval_results)
+            mean_cv_score.append(cv_score)
 
         print("============================================================================================")
 
@@ -138,6 +157,11 @@ def model_training(df):
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm, pred, proba, eval_results, cv_score
+            models.append(model)
+            predictions.append(pred)
+            probabilities.append(proba)
+            evaluation_results.append(eval_results)
+            mean_cv_score.append(cv_score)
 
         print("============================================================================================")
+        return models, predictions, probabilities, evaluation_results, mean_cv_score
