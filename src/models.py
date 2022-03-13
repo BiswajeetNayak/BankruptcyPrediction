@@ -9,43 +9,44 @@ from eval import *
 
 
 def isolation_forest(X):
-    contamination = config.isolation_forest_contamination
-    i_f = IsolationForest(contamination=contamination)
+    # contamination = config.isolation_forest_contamination
+    i_f = IsolationForest(random_state=100)
     i_f.fit(X)
     return i_f
 
 
 def logistic_regression(X, y):
-    lm = LogisticRegression()
+    lm = LogisticRegression(random_state=100)
     lm.fit(X, y)
     return lm
 
 
 def random_forest(X, y):
-    rf = RandomForestClassifier()
+    rf = RandomForestClassifier(random_state=100)
     rf.fit(X, y)
     return rf
 
 
 def adaboost_clf(X, y):
-    ab_clf = AdaBoostClassifier()
+    ab_clf = AdaBoostClassifier(random_state=100)
     ab_clf.fit(X, y)
     return ab_clf
 
 
 def GBM(X, y):
-    gbm = GradientBoostingClassifier()
+    gbm = GradientBoostingClassifier(random_state=100)
     gbm.fit(X, y)
     return gbm
 
 
 def SVM(X, y):
-    svm = SVC()
+    svm = SVC(random_state=100)
     svm.fit(X, y)
     return svm
 
-def save_model(model,model_name,path = config.models_file_path):
-    joblib.dump(model,f'{model_name}_BaseModel.pkl')
+
+def save_model(model, model_name, path=config.models_file_path):
+    joblib.dump(model, f'{model_name}_BaseModel.pkl')
     return None
 
 
@@ -65,15 +66,15 @@ def model_training(df):
             lm = logistic_regression(X_train, y_train)
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
-            save_model(lm,model)
-            save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
+            save_model(lm, model)
+            # save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
             print(f'Mean {config.CV_FOLD}-Fold cross validation score for a '
                   f'{model} model is : {cv_score}')
             eval_results = []
             for metric in config.eval_metrics:
                 print(f'The {metric} for {model} is: {eval_predictions(y_test, pred, metric)}')
                 eval_results.append(eval_predictions(y_test, pred, metric))
-            return lm,pred,proba,eval_results,cv_score
+            return lm, pred, proba, eval_results, cv_score
 
         print("============================================================================================")
 
@@ -82,7 +83,7 @@ def model_training(df):
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
             save_model(lm, model)
-            save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
+            # save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
             print(f'Mean {config.CV_FOLD}-Fold cross validation score for a '
                   f'{model} model is : {cv_score}')
             eval_results = []
@@ -98,7 +99,7 @@ def model_training(df):
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
             save_model(lm, model)
-            save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
+            # save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
             print(f'Mean {config.CV_FOLD}-Fold cross validation score for a '
                   f'{model} model is : {cv_score}')
             eval_results = []
@@ -114,7 +115,7 @@ def model_training(df):
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
             save_model(lm, model)
-            save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
+            # save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
             print(f'Mean {config.CV_FOLD}-Fold cross validation score for a '
                   f'{model} model is : {cv_score}')
             eval_results = []
@@ -130,7 +131,7 @@ def model_training(df):
             pred, proba = clf_predict(lm, X_test)
             cv_score = cross_validation_score(model=lm, X=X, y=y)
             save_model(lm, model)
-            save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
+            # save_output(pred, proba, pd.DataFrame(X_test, columns=df.columns.drop('class')),model)
             print(f'Mean {config.CV_FOLD}-Fold cross validation score for a '
                   f'{model} model is : {cv_score}')
             eval_results = []

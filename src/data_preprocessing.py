@@ -22,4 +22,5 @@ def impute_missing_vals(df):
     df = pd.DataFrame(X, index=df.index, columns=df.columns)
     return df
 
-
+def normalized_df(df):
+    return (df-df.min())/(df.max()-df.min())

@@ -6,7 +6,7 @@ from models import *
 
 def i_f_predict(model, X):
     pred = model.predict(X)
-    return pred, model
+    return pred
 
 
 def clf_predict(model, X):

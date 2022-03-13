@@ -53,6 +53,7 @@ if __name__ == '__main__':
     ## Creating dummy vars for missing value indicators.
     data_dummy = engineer_missing_val_indicators(data.drop(['class'], axis=1))
     data_dummy = impute_missing_vals(data_dummy)
+    data_dummy['#years'] = data_dummy['#years'].astype('int')
     data_dummy, outlier = outlier_indicators(data_dummy)
 
     data_dummy = pd.concat([data_dummy, data['class']], axis=1)
@@ -61,12 +62,12 @@ if __name__ == '__main__':
     model_all_data, pred_all_data, proba_all_data, eval_results_all_data, cv_score_all_data = model_training(data_dummy)
 
     for year in range(1, 6):
-        model, pred, proba, eval_results, cv_score = model_training(data_dummy[data_dummy['#year'] == year])
+        model, pred, proba, eval_results, cv_score = model_training(data_dummy[data_dummy['#years'] == year])
         models.append(model)
         predictions.append(pred)
         probabilities.append(proba)
         evaluation_results.append(eval_results)
         mean_cv_score.append(cv_score)
-        save_output(pred,proba,data_dummy[data_dummy['#year'] == year])
+        #save_output(pred,proba,data_dummy[data_dummy['#years'] == year])
 
 print('Execution Completed. \n All models are trained and predictions and probabilities are saved in data/output folder.')
